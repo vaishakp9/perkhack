@@ -24,7 +24,7 @@ def index():
 	return ("Welcome to PerkHack ! Devs : Suraj, Tushar, Vaishak, Vivek")
 	
 
-@app.route('/resto',methods=['GET'])
+@app.route('/resto',methods=['POST'])
 def resto():
 	request.headers
 	uid = request.headers.get('uid')
@@ -47,25 +47,49 @@ def resto():
 		csv1 = name+level+message
 		return (csv1)
 	else:
-		return ("NULL")
-@app.route('/weight',methods=['GET'])
+		return ("-1")
+@app.route('/wait',methods=['POST'])
 def weights():
 	request.headers
 	object_id = request.headers.get('object_id')
-	url1 = "https://graph.facebook.com/v2.3/"+object_id+"/likes?access_token=CAACEdEose0cBAKRKgIOBPDDXsr4WiTcTwO32OG0cFivSJ6LrEW1KbkHFqo1dWSE6PJjhgar91r6ZBEseVVx07pZAe4oSZAZANnr39ZB9ZAQ3XEf1pPM4BYrbb1L7xavPEc1JDET89XDBFlqpcYZAKNZCCleGd1ioO3aLvlkEGnCpnAhehPZAZCE04SEnq09YiWsRPOsoUMZCZCk7vAZDZD"
+	url1 = "https://graph.facebook.com/v2.2/100010977690590_"+object_id+"/likes?access_token=CAACEdEose0cBAExv0ZCwQw8dJ3i6vbXR2aN266f0ORvXK8GOuy9lapisrqblD4V3hjZBZBX2q3uPxzvV7FZBlGUjMd2Gp1eFZA5XRqgCf3tYbsWeFQZAmJPUxKznkH82cZC8P3XymsNVC2Bj4Q83ffr5ORkT5OcGHf61gyJX7ZB2mowHNwssjM5uSR0sYRixbj9BoCB27UtOKQZDZD"
 	r1 = requests.get(url1)
 	json_data = r1.json()
 	json_data = json_data["data"]
 	number = len(json_data)
 	#print(txt)
+	print (str(number))
 	return (str(number))
+@app.route('/post_analyze',methods=['POST'])
+def post_analyze():
+	request.headers
+	text = request.headers.get("text")
+	url = "https://api.repustate.com/v3/dc88b08e3079785fd126e94a3633fbe817e8d07b/score.json"
+	payload = {'api_key': '0f87719617638ba4db6fe9d0e686e077', 'text': text}
+	r = requests.post(url, data=payload)
+	json_data = r.json()
+	json_data = json_data["score"]
+	if(json_data>0.7 or json_data<-0.7):
+		return ("PA3")
+	if(json_data>0.4 or json_data<-0.4):
+		return ("PA2")
+	if(json_data>0.1 or json_data<-0.1):
+		return ("PA1")
+	return ("-1")
+@app.route('/weight1',methods=['POST'])
+def weights1():
+	request.headers
+	object_id = request.headers.get('object_id')
+	url1 = "https://graph.facebook.com/v2.2/101238380252085?access_token=CAACEdEose0cBAExv0ZCwQw8dJ3i6vbXR2aN266f0ORvXK8GOuy9lapisrqblD4V3hjZBZBX2q3uPxzvV7FZBlGUjMd2Gp1eFZA5XRqgCf3tYbsWeFQZAmJPUxKznkH82cZC8P3XymsNVC2Bj4Q83ffr5ORkT5OcGHf61gyJX7ZB2mowHNwssjM5uSR0sYRixbj9BoCB27UtOKQZDZD"
+	r1 = requests.get(url1)
+	return (r1.text)
 
 @app.route('/test',methods=['POST','GET'])
 def test():
 	request.headers
 	text = request.headers.get('text')
 	sentiment = text
-	url1 = "https://graph.facebook.com/v2.3/1223469374334702/likes?access_token=CAACEdEose0cBAKRKgIOBPDDXsr4WiTcTwO32OG0cFivSJ6LrEW1KbkHFqo1dWSE6PJjhgar91r6ZBEseVVx07pZAe4oSZAZANnr39ZB9ZAQ3XEf1pPM4BYrbb1L7xavPEc1JDET89XDBFlqpcYZAKNZCCleGd1ioO3aLvlkEGnCpnAhehPZAZCE04SEnq09YiWsRPOsoUMZCZCk7vAZDZD"
+	url1 = "https://graph.facebook.com/v2.3/1223469374334702/likes?access_token=CAACEdEose0cBAExv0ZCwQw8dJ3i6vbXR2aN266f0ORvXK8GOuy9lapisrqblD4V3hjZBZBX2q3uPxzvV7FZBlGUjMd2Gp1eFZA5XRqgCf3tYbsWeFQZAmJPUxKznkH82cZC8P3XymsNVC2Bj4Q83ffr5ORkT5OcGHf61gyJX7ZB2mowHNwssjM5uSR0sYRixbj9BoCB27UtOKQZDZD"
 	r1 = requests.get(url1)
 	#print r1.json()
 	json_data = r1.json()
@@ -93,11 +117,13 @@ def getSentiment():
 	text = request.headers.get('text')
 	sentiment = text
 	url = "https://api.repustate.com/v3/dc88b08e3079785fd126e94a3633fbe817e8d07b/score.json"
-	payload = {'api_key': '0f87719617638ba4db6fe9d0e686e077', 'text': 'happy'}
-	#r = requests.post(url, data=payload)
-	return (r.text)
+	payload = {'api_key': '0f87719617638ba4db6fe9d0e686e077', 'text': sentiment}
+	r = requests.post(url, data=payload)
+	json_data = r.json()
+	json_data = json_data["score"]
+	return (str(json_data))
 
-@app.route('/testImg',methods=['GET'])
+@app.route('/testImg',methods=['POST'])
 def testImg():
 	link=request.headers.get('link')
 	var = picMatch(link)
@@ -167,5 +193,5 @@ def picMatch(pic_link):
         else:
             return 1
 if __name__ =='__main__' :
-	app.run(host="0.0.0.0",port=5421)
+	app.run(host="0.0.0.0",port=5992)
 
