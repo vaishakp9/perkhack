@@ -5,23 +5,23 @@ Server for PerkHack Customer Advertorial-Review Incentivisation System
 For PerkHack
 Host : 192.168.1.22:5421
 
-/resto
-Method : GET Request
-Header : "uid : johndoe"
+/resto<br>
+Method : GET Request<br>
+Header : "uid : johndoe"<br>
 
 This method returns a csv string with all details of the restaurant based on uid, passed as a header
 
 
-/weight
-Method : GET Request
-Header : "object_id: johndoe"
+/weight<br>
+Method : GET Request<br>
+Header : "object_id: johndoe"<br>
 
 This method returns credits based on how popular the post is, ie, number of likes
 
 
-/getSentiment
+/getSentiment<br>
 
-Method : GET Request
-Header : "text : text_to_be_analysed"
+Method : GET Request<br>
+Header : "text : text_to_be_analysed"<br>
 
 This method returns a value between -1 and 1 that accurately depicts the mood of the text, so that the quality of the post can be evaluated, and appropriate Perk credits can be assigned to the reviewer
